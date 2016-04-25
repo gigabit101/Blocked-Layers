@@ -32,7 +32,7 @@ public class LayerHandler {
 			if (entry.getValue()) {
 				continue;
 			}
-			if (event.y < entry.getKey() + 1) {
+			if (event.y == entry.getKey()) { //< entry.getKey() + 1) {
 				event.setCanceled(true);
 				return;
 			}

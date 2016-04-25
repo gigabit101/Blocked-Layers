@@ -13,6 +13,7 @@ import mrriegel.blockedlayers.BlockedLayers;
 import mrriegel.blockedlayers.api.core.Quest;
 import mrriegel.blockedlayers.entity.PlayerInformation;
 import mrriegel.blockedlayers.handler.ConfigurationHandler;
+import mrriegel.blockedlayers.lib.ModInfo;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
@@ -30,7 +31,7 @@ import org.lwjgl.opengl.GL11;
 
 public class QuestGui extends GuiScreen {
 	private static final ResourceLocation GuiTextures = new ResourceLocation(
-			BlockedLayers.MOD_ID + ":textures/gui/questGUI.png");
+			ModInfo.MOD_ID + ":textures/gui/questGUI.png");
 	int pages, page;
 	int numofentrys = 13;
 	int imageWidth = 180;

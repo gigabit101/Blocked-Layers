@@ -102,8 +102,8 @@ public class Statics {
 				entity = true;
 			if (!item && !block && !entity && !q.getActivity().equals("find"))
 				throw new RuntimeException(q.getObject() + " doesn't exist");
-			if (q.getLayer() < 1 || q.getLayer() > 255)
-				throw new RuntimeException("layer out of range 1-255");
+			if (q.getLayer() < 0 || q.getLayer() > 255)
+				throw new RuntimeException("layer out of range 0-255");
 		}
 	}
 

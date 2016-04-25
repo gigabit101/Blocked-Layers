@@ -8,17 +8,18 @@ import mrriegel.blockedlayers.api.core.Reward;
 
 public class BlockedLayersApi 
 {
-	//TODO switch internals to use api
-	public static ArrayList<Quest> questList;
+	public static ArrayList<Quest> questList = new ArrayList<Quest>();
 	
 	public static HashMap<String, Quest> questMap;
 	
 	public static ArrayList<Reward> rewardList;
 	
 
-	//eg  ("apple", "eat", "apple", "minecraft", "eat apple", 64, 0, 6, 0));
-	public static void addQuest(String name, String activity, String object, String modID, String text, int layer, int meta, int number, int dimetionID)
+	//eg:  ("apple", "eat", "apple", "minecraft", "eat apple", 64, 0, 6, 0));
+	public static Quest addQuest(String name, String activity, String object, String modID, String text, int layer, int meta, int number, int dimetionID)
 	{
-		questList.add(new Quest(name, activity, object, modID, text, layer, meta, number, dimetionID));
+		Quest quest = new Quest(name, activity, object, modID, text, layer, meta, number, dimetionID);
+		questList.add(quest);
+		return quest;
 	}
 }

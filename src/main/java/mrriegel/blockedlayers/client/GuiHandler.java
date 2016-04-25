@@ -1,9 +1,8 @@
-package mrriegel.blockedlayers.handler;
+package mrriegel.blockedlayers.client;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.network.IGuiHandler;
-import mrriegel.blockedlayers.client.QuestGui;
 
 public class GuiHandler implements IGuiHandler {
 

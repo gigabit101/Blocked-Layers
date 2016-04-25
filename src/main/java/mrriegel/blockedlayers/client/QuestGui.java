@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import mrriegel.blockedlayers.BlockedLayers;
+import mrriegel.blockedlayers.api.BlockedLayersApi;
 import mrriegel.blockedlayers.api.core.Quest;
 import mrriegel.blockedlayers.entity.PlayerInformation;
 import mrriegel.blockedlayers.handler.ConfigurationHandler;
@@ -56,8 +57,8 @@ public class QuestGui extends GuiScreen {
 	}
 
 	Mode mode = Mode.LAYER;
-	ArrayList<Quest> qus = new ArrayList<Quest>(
-			BlockedLayers.instance.questList);
+	ArrayList<Quest> qus = new ArrayList<Quest>(BlockedLayersApi.questList);
+			//BlockedLayers.instance.questList);
 
 	public QuestGui(EntityPlayer player) {
 		PlayerInformation pro = PlayerInformation.get(player);

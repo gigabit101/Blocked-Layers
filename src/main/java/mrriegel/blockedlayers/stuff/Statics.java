@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import mrriegel.blockedlayers.api.BlockedLayersApi;
 import mrriegel.blockedlayers.api.core.Quest;
 import mrriegel.blockedlayers.api.core.Reward;
 import mrriegel.blockedlayers.entity.PlayerInformation;
@@ -49,7 +50,7 @@ public class Statics {
 
 		for (EntityPlayerMP pp : players) {
 			PlayerInformation.get(pp).setQuestNums(fake2);
-			for (Quest q : instance.questList) {
+			for (Quest q : BlockedLayersApi.questList) {
 				if (!PlayerInformation.get(pp).getQuestBools().get(q.getName())
 						&& PlayerInformation.get(pp).getQuestNums()
 								.get(q.getName() + "Num") >= q.getNumber())
@@ -121,8 +122,8 @@ public class Statics {
 
 	public static void fillQuestsFirst(FileWriter fw) throws IOException {
 		ArrayList<Quest> tmp = new ArrayList<Quest>();
-		tmp.add(new Quest("apple", "eat", "apple", "minecraft", "eat apple",
-				64, 0, 6, 0));
+//		tmp.add(new Quest("apple", "eat", "apple", "minecraft", "eat apple",
+//				64, 0, 6, 0));
 		tmp.add(new Quest("quick", "eat", "potion", "minecraft", "swiftness",
 				54, 8226, 1, 0));
 		tmp.add(new Quest("sheepy", "break", "wool", "minecraft", "pink", 54,

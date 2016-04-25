@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import mrriegel.blockedlayers.BlockedLayers;
+import mrriegel.blockedlayers.api.BlockedLayersApi;
 import mrriegel.blockedlayers.api.core.Quest;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,7 +22,7 @@ public class PlayerInformation implements IExtendedEntityProperties {
 	private String team;
 
 	public PlayerInformation() {
-		for (Quest q : BlockedLayers.instance.questList) {
+		for (Quest q : BlockedLayersApi.questList) {//BlockedLayers.instance.questList) {
 			questBools.put(q.getName(), false);
 			questNums.put(q.getName() + "Num", 0);
 			layerBools.put(q.getLayer(), false);

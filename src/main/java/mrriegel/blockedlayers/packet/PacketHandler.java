@@ -1,9 +1,7 @@
-package mrriegel.blockedlayers.handler;
+package mrriegel.blockedlayers.packet;
 
 import mrriegel.blockedlayers.BlockedLayers;
 import mrriegel.blockedlayers.lib.ModInfo;
-import mrriegel.blockedlayers.packet.KeyPacket;
-import mrriegel.blockedlayers.packet.SyncClientPacket;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
 

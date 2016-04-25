@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Map.Entry;
 
 import mrriegel.blockedlayers.BlockedLayers;
+import mrriegel.blockedlayers.api.BlockedLayersApi;
 import mrriegel.blockedlayers.api.core.Quest;
 import mrriegel.blockedlayers.api.core.Reward;
 import mrriegel.blockedlayers.entity.PlayerInformation;
@@ -61,7 +62,7 @@ public class QuestHandler {
 			return;
 		EntityPlayer player = event.entityPlayer;
 		PlayerInformation pro = PlayerInformation.get(player);
-		for (Quest q : BlockedLayers.instance.questList) {
+		for (Quest q : BlockedLayersApi.questList) {
 			String name = q.getName();
 			if (!q.getActivity().equals("eat") || !questValid(pro, q)
 					|| pro.getQuestBools().get(name)
@@ -96,7 +97,7 @@ public class QuestHandler {
 			return;
 		EntityPlayer player = event.getPlayer();
 		PlayerInformation pro = PlayerInformation.get(player);
-		for (Quest q : BlockedLayers.instance.questList) {
+		for (Quest q : BlockedLayersApi.questList) {
 			String name = q.getName();
 			if (!q.getActivity().equals("break")
 					|| !questValid(pro, q)
@@ -134,7 +135,7 @@ public class QuestHandler {
 			return;
 		EntityPlayer player = (EntityPlayer) event.source.getEntity();
 		PlayerInformation pro = PlayerInformation.get(player);
-		for (Quest q : BlockedLayers.instance.questList) {
+		for (Quest q : BlockedLayersApi.questList) {
 			String name = q.getName();
 			if (!q.getActivity().equals("kill") || !questValid(pro, q)
 					|| pro.getQuestBools().get(name)
@@ -170,7 +171,7 @@ public class QuestHandler {
 		if (player == null)
 			return;
 		PlayerInformation pro = PlayerInformation.get(player);
-		for (Quest q : BlockedLayers.instance.questList) {
+		for (Quest q : BlockedLayersApi.questList) {
 			String name = q.getName();
 			if (!q.getActivity().equals("harvest") || !questValid(pro, q)
 					|| pro.getQuestBools().get(name)
@@ -208,7 +209,7 @@ public class QuestHandler {
 			return;
 		EntityPlayer player = (EntityPlayer) event.source.getEntity();
 		PlayerInformation pro = PlayerInformation.get(player);
-		for (Quest q : BlockedLayers.instance.questList) {
+		for (Quest q : BlockedLayersApi.questList) {
 			String name = q.getName();
 			if (!q.getActivity().equals("loot") || !questValid(pro, q)
 					|| pro.getQuestBools().get(name)
@@ -247,7 +248,7 @@ public class QuestHandler {
 			return;
 		EntityPlayer player = event.entityPlayer;
 		PlayerInformation pro = PlayerInformation.get(player);
-		for (Quest q : BlockedLayers.instance.questList) {
+		for (Quest q : BlockedLayersApi.questList) {
 			String name = q.getName();
 			if ((!q.getActivity().equals("own") && !q.getActivity().equals(
 					"consume"))
@@ -344,7 +345,7 @@ public class QuestHandler {
 			return;
 		EntityPlayer player = event.entityPlayer;
 		PlayerInformation pro = PlayerInformation.get(player);
-		for (Quest q : BlockedLayers.instance.questList) {
+		for (Quest q : BlockedLayersApi.questList) {
 			String name = q.getName();
 			if (!q.getActivity().equals("xp") || !questValid(pro, q)
 					|| pro.getQuestBools().get(name)
@@ -371,7 +372,7 @@ public class QuestHandler {
 		PlayerInformation pro = PlayerInformation.get(player);
 		String currentBiom = event.world.getWorldChunkManager().getBiomeGenAt(
 				event.x, event.z).biomeName;
-		for (Quest q : BlockedLayers.instance.questList) {
+		for (Quest q : BlockedLayersApi.questList) {
 			String name = q.getName();
 			if (!q.getActivity().equals("find") || !questValid(pro, q)
 					|| pro.getQuestBools().get(name)
@@ -394,7 +395,7 @@ public class QuestHandler {
 		EntityPlayer player = event.player;
 		PlayerInformation pro = PlayerInformation.get(player);
 		ItemStack oriStack = event.crafting.copy();
-		for (Quest q : BlockedLayers.instance.questList) {
+		for (Quest q : BlockedLayersApi.questList) {
 			String name = q.getName();
 			if (!q.getActivity().equals("craft") || !questValid(pro, q)
 					|| pro.getQuestBools().get(name)
@@ -413,7 +414,7 @@ public class QuestHandler {
 		EntityPlayer player = event.player;
 		PlayerInformation pro = PlayerInformation.get(player);
 		ItemStack oriStack = event.smelting.copy();
-		for (Quest q : BlockedLayers.instance.questList) {
+		for (Quest q : BlockedLayersApi.questList) {
 			String name = q.getName();
 			if (!q.getActivity().equals("craft") || !questValid(pro, q)
 					|| pro.getQuestBools().get(name)
@@ -456,7 +457,7 @@ public class QuestHandler {
 		PlayerInformation pro = PlayerInformation.get(player);
 		for (Entry<Integer, Boolean> entry : pro.getLayerBools().entrySet()) {
 			boolean ll = true;
-			for (Quest q : BlockedLayers.instance.questList) {
+			for (Quest q : BlockedLayersApi.questList) {
 				if (q.getLayer() == entry.getKey()) {
 					if (!pro.getQuestBools().get(q.getName())) {
 						ll = false;
@@ -471,7 +472,7 @@ public class QuestHandler {
 								entry.getKey())));
 				if (!ConfigurationHandler.reward)
 					continue;
-				for (Reward r : BlockedLayers.instance.rewardList) {
+				for (Reward r : BlockedLayersApi.rewardList) {
 					if (r.getLayer() == entry.getKey()) {
 						ArrayList<ItemStack> tmp = new ArrayList<ItemStack>();
 						for (String s : r.getRewards()) {

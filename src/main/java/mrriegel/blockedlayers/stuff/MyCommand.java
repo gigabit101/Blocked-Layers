@@ -3,9 +3,10 @@ package mrriegel.blockedlayers.stuff;
 import java.util.List;
 
 import mrriegel.blockedlayers.BlockedLayers;
+import mrriegel.blockedlayers.api.BlockedLayersApi;
 import mrriegel.blockedlayers.api.core.Quest;
 import mrriegel.blockedlayers.entity.PlayerInformation;
-import mrriegel.blockedlayers.handler.PacketHandler;
+import mrriegel.blockedlayers.packet.PacketHandler;
 import mrriegel.blockedlayers.packet.SyncClientPacket;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -112,7 +113,7 @@ public class MyCommand implements ICommand {
 				PlayerInformation pro = PlayerInformation.get(player);
 				if (pro.getLayerBools().containsKey(Integer.valueOf(args[3]))) {
 					pro.getLayerBools().put(Integer.valueOf(args[3]), false);
-					for (Quest q : BlockedLayers.instance.questList) {
+					for (Quest q : BlockedLayersApi.questList) {
 						if (q.getLayer() == Integer.valueOf(args[3])) {
 							pro.getQuestBools().put(q.getName(), false);
 							pro.getQuestNums().put(q.getName() + "Num", 0);

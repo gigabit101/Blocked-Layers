@@ -8,22 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import mrriegel.blockedlayers.api.BlockedLayersApi;
-import mrriegel.blockedlayers.api.core.Quest;
-import mrriegel.blockedlayers.api.core.Reward;
-import mrriegel.blockedlayers.client.KeyHandler;
-import mrriegel.blockedlayers.handler.ConfigurationHandler;
-import mrriegel.blockedlayers.handler.GuiHandler;
-import mrriegel.blockedlayers.handler.LayerHandler;
-import mrriegel.blockedlayers.handler.PacketHandler;
-import mrriegel.blockedlayers.handler.QuestHandler;
-import mrriegel.blockedlayers.handler.SyncHandler;
-import mrriegel.blockedlayers.lib.ModInfo;
-import mrriegel.blockedlayers.proxy.CommonProxy;
-import mrriegel.blockedlayers.stuff.MyCommand;
-import mrriegel.blockedlayers.stuff.Statics;
-import net.minecraftforge.common.MinecraftForge;
-
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
@@ -34,8 +18,23 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.functions.ModIdFunction;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import mrriegel.blockedlayers.api.BlockedLayersApi;
+import mrriegel.blockedlayers.api.core.Quest;
+import mrriegel.blockedlayers.api.core.Reward;
+import mrriegel.blockedlayers.client.GuiHandler;
+import mrriegel.blockedlayers.client.KeyHandler;
+import mrriegel.blockedlayers.handler.ConfigurationHandler;
+import mrriegel.blockedlayers.handler.LayerHandler;
+import mrriegel.blockedlayers.handler.QuestHandler;
+import mrriegel.blockedlayers.handler.SyncHandler;
+import mrriegel.blockedlayers.init.ModQuests;
+import mrriegel.blockedlayers.lib.ModInfo;
+import mrriegel.blockedlayers.packet.PacketHandler;
+import mrriegel.blockedlayers.proxy.CommonProxy;
+import mrriegel.blockedlayers.stuff.MyCommand;
+import mrriegel.blockedlayers.stuff.Statics;
+import net.minecraftforge.common.MinecraftForge;
 
 @Mod(modid = ModInfo.MOD_ID, name = ModInfo.MOD_NAME, version = ModInfo.MOD_VERSION)
 public class BlockedLayers 
@@ -45,10 +44,6 @@ public class BlockedLayers
 
 	@SidedProxy(clientSide = ModInfo.CLIENT_PROXY_CLASS, serverSide = ModInfo.COMMON_PROXY_CLASS)
 	public static CommonProxy proxy;
-
-	public ArrayList<Quest> questList;
-	public HashMap<String, Quest> questMap;
-	public ArrayList<Reward> rewardList;
 	
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) throws IOException 
@@ -65,10 +60,10 @@ public class BlockedLayers
 			fw.close();
 		}
 
-		questList = new Gson().fromJson(new BufferedReader(new FileReader(questFile)), new TypeToken<ArrayList<Quest>>(){}.getType());
-		questMap = new HashMap<String, Quest>();
-		for (Quest q : questList)
-			questMap.put(q.getName(), q);
+		BlockedLayersApi.questList = new Gson().fromJson(new BufferedReader(new FileReader(questFile)), new TypeToken<ArrayList<Quest>>(){}.getType());
+		BlockedLayersApi.questMap = new HashMap<String, Quest>();
+		for (Quest q : BlockedLayersApi.questList)
+			BlockedLayersApi.questMap.put(q.getName(), q);
 
 		File rewardFile = new File(configDir, "rewards.json");
 		if (!rewardFile.exists()) 
@@ -78,8 +73,9 @@ public class BlockedLayers
 			Statics.fillRewardsFirst(fw);
 			fw.close();
 		}
+		ModQuests.init();
 
-		rewardList = new Gson().fromJson(new BufferedReader(new FileReader(rewardFile)), new TypeToken<ArrayList<Reward>>(){}.getType());
+		BlockedLayersApi.rewardList = new Gson().fromJson(new BufferedReader(new FileReader(rewardFile)), new TypeToken<ArrayList<Reward>>(){}.getType());
 		PacketHandler.init();
 	}
 
@@ -105,7 +101,7 @@ public class BlockedLayers
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) 
 	{
-		Statics.validateQuests(questList);
-		Statics.validateRewards(rewardList);
+		Statics.validateQuests(BlockedLayersApi.questList);
+		Statics.validateRewards(BlockedLayersApi.rewardList);
 	}
 }

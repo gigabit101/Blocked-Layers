@@ -1,6 +1,8 @@
 package mrriegel.blockedlayers.handler;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import mrriegel.blockedlayers.entity.PlayerInformation;
+import mrriegel.blockedlayers.packet.PacketHandler;
 import mrriegel.blockedlayers.packet.SyncClientPacket;
 import mrriegel.blockedlayers.stuff.Statics;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,7 +11,6 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class SyncHandler {
 

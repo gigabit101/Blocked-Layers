@@ -1,17 +1,16 @@
 package mrriegel.blockedlayers.client;
 
-import mrriegel.blockedlayers.BlockedLayers;
-import mrriegel.blockedlayers.handler.PacketHandler;
-import mrriegel.blockedlayers.lib.ModInfo;
-import mrriegel.blockedlayers.packet.KeyPacket;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.entity.player.EntityPlayer;
-
 import org.lwjgl.input.Keyboard;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
+import mrriegel.blockedlayers.BlockedLayers;
+import mrriegel.blockedlayers.lib.ModInfo;
+import mrriegel.blockedlayers.packet.KeyPacket;
+import mrriegel.blockedlayers.packet.PacketHandler;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class KeyHandler {
 	public static KeyBinding gui = new KeyBinding(ModInfo.MOD_ID

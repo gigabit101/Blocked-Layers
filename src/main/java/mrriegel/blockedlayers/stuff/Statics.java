@@ -120,34 +120,34 @@ public class Statics {
 	public static void fillQuestsFirst(FileWriter fw) throws IOException {
 		ArrayList<Quest> tmp = new ArrayList<Quest>();
 		tmp.add(new Quest("apple", "eat", "apple", "minecraft", "eat apple",
-				64, 0, 6));
+				64, 0, 6, 0));
 		tmp.add(new Quest("quick", "eat", "potion", "minecraft", "swiftness",
-				54, 8226, 1));
+				54, 8226, 1, 0));
 		tmp.add(new Quest("sheepy", "break", "wool", "minecraft", "pink", 54,
-				6, 2));
+				6, 2, 0));
 		tmp.add(new Quest("logs", "break", "log", "minecraft", "woods", 64, -1,
-				5));
+				5, 0));
 		tmp.add(new Quest("pearl", "kill", "Enderman", "minecraft", "ender",
-				54, 0, 2));
+				54, 0, 2, 0));
 		tmp.add(new Quest("wither", "kill", "Skeleton", "minecraft", "coal",
-				54, 1, 1));
+				54, 1, 1, 0));
 		tmp.add(new Quest("rich", "harvest", "diamond", "minecraft", "bright",
-				14, 0, 8));
+				14, 0, 8, 0));
 		tmp.add(new Quest("wheat", "harvest", "wheat", "minecraft", "bread",
-				64, 0, 4));
+				64, 0, 4, 0));
 		tmp.add(new Quest("zombie", "loot", "rotten_flesh", "minecraft",
-				"rotten", 54, 0, 2));
+				"rotten", 54, 0, 2, 0));
 		tmp.add(new Quest("goldy", "own", "gold_ingot", "minecraft", "golden",
-				54, 0, 8));
+				54, 0, 8, 0));
 		tmp.add(new Quest("hunger", "consume", "cooked_chicken", "minecraft",
-				"chick", 64, 0, 16));
-		tmp.add(new Quest("xp", "xp", null, null, "green", 54, 0, 300));
+				"chick", 64, 0, 16, 0));
+		tmp.add(new Quest("xp", "xp", null, null, "green", 54, 0, 300, 0));
 		tmp.add(new Quest("hot", "find", "Desert", null, "without water", 34,
-				0, 1));
+				0, 1, 0));
 		tmp.add(new Quest("bread", "craft", "bread", "minecraft", "ham", 54, 0,
-				12));
+				12, 0));
 		tmp.add(new Quest("charcoal", "craft", "coal", "minecraft", "fuel", 54,
-				1, 8));
+				1, 8, 0));
 		fw.write(new GsonBuilder().setPrettyPrinting().create().toJson(tmp));
 	}
 

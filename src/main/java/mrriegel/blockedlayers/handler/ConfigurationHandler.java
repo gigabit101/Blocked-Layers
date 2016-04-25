@@ -30,6 +30,7 @@ public class ConfigurationHandler {
 				new int[] { -1, 1 }, "blacklist").getIntList();
 		dimensionWhite = config.get("Common", "dimensionWhite", new int[] {},
 				"whitelist").getIntList();
+		
 		if (config.hasChanged()) {
 			config.save();
 		}

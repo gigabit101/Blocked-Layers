@@ -1,4 +1,4 @@
-package mrriegel.blockedlayers.stuff;
+package mrriegel.blockedlayers.client;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import mrriegel.blockedlayers.BlockedLayers;
+import mrriegel.blockedlayers.api.core.Quest;
 import mrriegel.blockedlayers.entity.PlayerInformation;
 import mrriegel.blockedlayers.handler.ConfigurationHandler;
 import net.minecraft.client.gui.GuiButton;

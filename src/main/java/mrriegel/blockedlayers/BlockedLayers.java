@@ -8,17 +8,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import mrriegel.blockedlayers.api.BlockedLayersApi;
+import mrriegel.blockedlayers.api.core.Quest;
+import mrriegel.blockedlayers.api.core.Reward;
+import mrriegel.blockedlayers.client.KeyHandler;
 import mrriegel.blockedlayers.handler.ConfigurationHandler;
 import mrriegel.blockedlayers.handler.GuiHandler;
-import mrriegel.blockedlayers.handler.KeyHandler;
 import mrriegel.blockedlayers.handler.LayerHandler;
 import mrriegel.blockedlayers.handler.PacketHandler;
 import mrriegel.blockedlayers.handler.QuestHandler;
 import mrriegel.blockedlayers.handler.SyncHandler;
 import mrriegel.blockedlayers.proxy.CommonProxy;
 import mrriegel.blockedlayers.stuff.MyCommand;
-import mrriegel.blockedlayers.stuff.Quest;
-import mrriegel.blockedlayers.stuff.Reward;
 import mrriegel.blockedlayers.stuff.Statics;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -35,7 +36,8 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
 @Mod(modid = BlockedLayers.MOD_ID, name = BlockedLayers.MOD_NAME, version = BlockedLayers.VERSION)
-public class BlockedLayers {
+public class BlockedLayers 
+{
 	public static final String MOD_ID = "BlockedLayers";
 	public static final String MOD_NAME = "Blocked Layers";
 	public static final String VERSION = "1.7.10-3.0";
@@ -51,46 +53,43 @@ public class BlockedLayers {
 	public ArrayList<Quest> questList;
 	public HashMap<String, Quest> questMap;
 	public ArrayList<Reward> rewardList;
-
+	
 	@Mod.EventHandler
-	public void preInit(FMLPreInitializationEvent event) throws IOException {
-		File configDir = new File(event.getModConfigurationDirectory(),
-				"BlockedLayers");
+	public void preInit(FMLPreInitializationEvent event) throws IOException 
+	{
+		File configDir = new File(event.getModConfigurationDirectory(), "BlockedLayers");
 		ConfigurationHandler.load(new File(configDir, "config.cfg"));
 
 		File questFile = new File(configDir, "quests.json");
-		if (!questFile.exists()) {
+		if (!questFile.exists()) 
+		{
 			questFile.createNewFile();
 			FileWriter fw = new FileWriter(questFile);
 			Statics.fillQuestsFirst(fw);
 			fw.close();
 		}
 
-		questList = new Gson().fromJson(new BufferedReader(new FileReader(
-				questFile)), new TypeToken<ArrayList<Quest>>() {
-		}.getType());
+		questList = new Gson().fromJson(new BufferedReader(new FileReader(questFile)), new TypeToken<ArrayList<Quest>>(){}.getType());
 		questMap = new HashMap<String, Quest>();
 		for (Quest q : questList)
 			questMap.put(q.getName(), q);
 
 		File rewardFile = new File(configDir, "rewards.json");
-		if (!rewardFile.exists()) {
+		if (!rewardFile.exists()) 
+		{
 			rewardFile.createNewFile();
 			FileWriter fw = new FileWriter(rewardFile);
 			Statics.fillRewardsFirst(fw);
 			fw.close();
 		}
 
-		rewardList = new Gson().fromJson(new BufferedReader(new FileReader(
-				rewardFile)), new TypeToken<ArrayList<Reward>>() {
-		}.getType());
-
+		rewardList = new Gson().fromJson(new BufferedReader(new FileReader(rewardFile)), new TypeToken<ArrayList<Reward>>(){}.getType());
 		PacketHandler.init();
-
 	}
 
 	@Mod.EventHandler
-	public void init(FMLInitializationEvent event) {
+	public void init(FMLInitializationEvent event) 
+	{
 		MinecraftForge.EVENT_BUS.register(new LayerHandler());
 		MinecraftForge.EVENT_BUS.register(new QuestHandler());
 		FMLCommonHandler.instance().bus().register(new QuestHandler());
@@ -99,18 +98,18 @@ public class BlockedLayers {
 		MinecraftForge.EVENT_BUS.register(this);
 		FMLCommonHandler.instance().bus().register(new KeyHandler());
 		proxy.registerHandlers();
-
 	}
 
 	@Mod.EventHandler
-	public void serverLoad(FMLServerStartingEvent event) {
+	public void serverLoad(FMLServerStartingEvent event) 
+	{
 		event.registerServerCommand(new MyCommand());
 	}
 
 	@Mod.EventHandler
-	public void postInit(FMLPostInitializationEvent event) {
+	public void postInit(FMLPostInitializationEvent event) 
+	{
 		Statics.validateQuests(questList);
 		Statics.validateRewards(rewardList);
 	}
-
 }

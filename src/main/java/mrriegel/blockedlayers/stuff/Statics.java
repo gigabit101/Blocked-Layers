@@ -9,6 +9,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import mrriegel.blockedlayers.api.core.Quest;
+import mrriegel.blockedlayers.api.core.Reward;
 import mrriegel.blockedlayers.entity.PlayerInformation;
 import mrriegel.blockedlayers.handler.ConfigurationHandler;
 import mrriegel.blockedlayers.handler.QuestHandler;

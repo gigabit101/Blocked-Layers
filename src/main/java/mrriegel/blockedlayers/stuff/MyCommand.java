@@ -3,6 +3,7 @@ package mrriegel.blockedlayers.stuff;
 import java.util.List;
 
 import mrriegel.blockedlayers.BlockedLayers;
+import mrriegel.blockedlayers.api.core.Quest;
 import mrriegel.blockedlayers.entity.PlayerInformation;
 import mrriegel.blockedlayers.handler.PacketHandler;
 import mrriegel.blockedlayers.packet.SyncClientPacket;

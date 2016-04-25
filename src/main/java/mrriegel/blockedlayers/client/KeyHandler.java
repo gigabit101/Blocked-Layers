@@ -1,6 +1,7 @@
-package mrriegel.blockedlayers.handler;
+package mrriegel.blockedlayers.client;
 
 import mrriegel.blockedlayers.BlockedLayers;
+import mrriegel.blockedlayers.handler.PacketHandler;
 import mrriegel.blockedlayers.packet.KeyPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;

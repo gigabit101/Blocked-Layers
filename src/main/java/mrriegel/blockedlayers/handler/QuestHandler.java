@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Map.Entry;
 
 import mrriegel.blockedlayers.BlockedLayers;
+import mrriegel.blockedlayers.api.core.Quest;
+import mrriegel.blockedlayers.api.core.Reward;
 import mrriegel.blockedlayers.entity.PlayerInformation;
-import mrriegel.blockedlayers.stuff.Quest;
-import mrriegel.blockedlayers.stuff.Reward;
 import mrriegel.blockedlayers.stuff.Statics;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -386,6 +386,7 @@ public class QuestHandler {
 		}
 	}
 
+	//TODO shift click fix
 	@SubscribeEvent
 	public void craft(PlayerEvent.ItemCraftedEvent event) {
 		if (event.player.worldObj.isRemote)
@@ -404,6 +405,7 @@ public class QuestHandler {
 		}
 	}
 
+	//TODO shift click fix
 	@SubscribeEvent
 	public void smelt(PlayerEvent.ItemSmeltedEvent event) {
 		if (event.player.worldObj.isRemote)

@@ -1,7 +1,7 @@
 package mrriegel.blockedlayers.proxy;
 
-import mrriegel.blockedlayers.handler.KeyHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
+import mrriegel.blockedlayers.client.KeyHandler;
 
 public class ClientProxy extends CommonProxy {
 

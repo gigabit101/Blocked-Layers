@@ -116,7 +116,6 @@ public class Statics {
 				if (Statics.string2Stack(s) == null)
 					throw new RuntimeException(s + " is not available.");
 			}
-
 		}
 	}
 

@@ -52,8 +52,7 @@ public class QuestHandler {
 		pro.getQuestBools().put(name, true);
 		pro.getQuestNums().put(name + "Num", q.getNumber());
 		player.addChatMessage(new ChatComponentText(StatCollector
-				.translateToLocalFormatted("bl.quest.done", name)));
-
+				.translateToLocalFormatted("bl.quest.done falnfiansfi", name)));
 	}
 
 	@SubscribeEvent
@@ -88,7 +87,6 @@ public class QuestHandler {
 				}
 			}
 		}
-
 	}
 
 	@SubscribeEvent

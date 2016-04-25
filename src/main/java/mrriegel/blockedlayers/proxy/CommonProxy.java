@@ -1,8 +1,9 @@
 package mrriegel.blockedlayers.proxy;
 
-public class CommonProxy {
-
-	public void registerHandlers() {
-
+public class CommonProxy 
+{
+	public void registerHandlers() 
+	{
+		//NOOP
 	}
 }

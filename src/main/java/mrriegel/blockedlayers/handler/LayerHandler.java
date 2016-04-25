@@ -8,14 +8,13 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.world.BlockEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
-public class LayerHandler {
-
+public class LayerHandler 
+{
 	@SubscribeEvent
-	public void disallow(BlockEvent.BreakEvent event) {
-		boolean currentBlacklisted = isIn(ConfigurationHandler.dimensionBlack,
-				event.world.provider.dimensionId);
-		boolean currentWhitelisted = isIn(ConfigurationHandler.dimensionWhite,
-				event.world.provider.dimensionId);
+	public void disallow(BlockEvent.BreakEvent event) 
+	{
+		boolean currentBlacklisted = isIn(ConfigurationHandler.dimensionBlack, event.world.provider.dimensionId);
+		boolean currentWhitelisted = isIn(ConfigurationHandler.dimensionWhite, event.world.provider.dimensionId);
 		String bool = ConfigurationHandler.dimensionBlack.length == 0 ? ConfigurationHandler.dimensionWhite.length == 0 ? "nothing"
 				: "white"
 				: "black";
@@ -28,19 +27,22 @@ public class LayerHandler {
 
 		EntityPlayer player = event.getPlayer();
 		PlayerInformation pro = PlayerInformation.get(player);
-		for (Entry<Integer, Boolean> entry : pro.getLayerBools().entrySet()) {
-			if (entry.getValue()) {
+		for (Entry<Integer, Boolean> entry : pro.getLayerBools().entrySet()) 
+		{
+			if (entry.getValue()) 
+			{
 				continue;
 			}
-			if (event.y < entry.getKey()) { //< entry.getKey() + 1) {
+			if (event.y < entry.getKey()) 
+			{
 				event.setCanceled(true);
-				System.out.println("" + entry);
 				return;
 			}
 		}
 	}
 
-	boolean isIn(int[] ar, int i) {
+	boolean isIn(int[] ar, int i) 
+	{
 		for (int o : ar)
 			if (i == o)
 				return true;

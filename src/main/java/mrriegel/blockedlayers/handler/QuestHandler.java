@@ -77,11 +77,12 @@ public class QuestHandler {
 				stack = new ItemStack(target, 1, q.getMeta());
 
 			int number = q.getNumber();
+			int dim = q.getDimentionID();
 
 			if (player.getCurrentEquippedItem().isItemEqual(stack)) {
 				pro.getQuestNums().put(name + "Num",
 						pro.getQuestNums().get(name + "Num") + 1);
-				if (pro.getQuestNums().get(name + "Num") >= number) {
+				if (pro.getQuestNums().get(name + "Num") >= number && event.entityPlayer.worldObj.provider.dimensionId == dim) {
 					finish(player, q);
 					Statics.syncTeams(pro.getTeam());
 				}
@@ -114,11 +115,13 @@ public class QuestHandler {
 				meta = q.getMeta();
 			}
 			int number = q.getNumber();
+			int dim = q.getDimentionID();
 
-			if (event.block.equals(target) && event.blockMetadata == meta) {
-				pro.getQuestNums().put(name + "Num",
-						pro.getQuestNums().get(name + "Num") + 1);
-				if (pro.getQuestNums().get(name + "Num") >= number) {
+			if (event.block.equals(target) && event.blockMetadata == meta) 
+			{
+				pro.getQuestNums().put(name + "Num", pro.getQuestNums().get(name + "Num") + 1);
+				if (pro.getQuestNums().get(name + "Num") >= number && event.world.provider.dimensionId == dim) 
+				{
 					finish(player, q);
 					Statics.syncTeams(pro.getTeam());
 				}
@@ -146,6 +149,7 @@ public class QuestHandler {
 
 			int number = q.getNumber();
 			int meta = q.getMeta();
+			int dim = q.getDimentionID();
 			Entity e = event.entity;
 
 			if (target.isInstance(e)
@@ -153,7 +157,7 @@ public class QuestHandler {
 							.getSkeletonType() == meta)) {
 				pro.getQuestNums().put(name + "Num",
 						pro.getQuestNums().get(name + "Num") + 1);
-				if (pro.getQuestNums().get(name + "Num") >= number) {
+				if (pro.getQuestNums().get(name + "Num") >= number && event.entityLiving.worldObj.provider.dimensionId == dim) {
 					finish(player, q);
 					Statics.syncTeams(pro.getTeam());
 				}
@@ -185,13 +189,14 @@ public class QuestHandler {
 				else
 					target = new ItemStack(targetItem, 1, q.getMeta());
 				int number = q.getNumber();
+				int dim = q.getDimentionID();
 
 				if (target.isItemEqual(stack)) {
 					pro.getQuestNums().put(
 							name + "Num",
 							pro.getQuestNums().get(name + "Num")
 									+ stack.copy().stackSize);
-					if (pro.getQuestNums().get(name + "Num") >= number) {
+					if (pro.getQuestNums().get(name + "Num") >= number && event.world.provider.dimensionId == dim) {
 						finish(player, q);
 						Statics.syncTeams(pro.getTeam());
 					}
@@ -225,13 +230,14 @@ public class QuestHandler {
 				else
 					target = new ItemStack(targetItem, 1, q.getMeta());
 				int number = q.getNumber();
+				int dim = q.getDimentionID();
 
 				if (target.isItemEqual(stack)) {
 					pro.getQuestNums().put(
 							name + "Num",
 							pro.getQuestNums().get(name + "Num")
 									+ stack.stackSize);
-					if (pro.getQuestNums().get(name + "Num") >= number) {
+					if (pro.getQuestNums().get(name + "Num") >= number && event.entityLiving.worldObj.provider.dimensionId == dim) {
 						finish(player, q);
 						Statics.syncTeams(pro.getTeam());
 					}

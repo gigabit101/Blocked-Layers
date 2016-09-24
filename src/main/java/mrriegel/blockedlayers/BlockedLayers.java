@@ -1,24 +1,7 @@
 package mrriegel.blockedlayers;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
-
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
 import mrriegel.blockedlayers.api.BlockedLayersApi;
 import mrriegel.blockedlayers.api.core.Quest;
 import mrriegel.blockedlayers.api.core.Reward;
@@ -35,6 +18,18 @@ import mrriegel.blockedlayers.proxy.CommonProxy;
 import mrriegel.blockedlayers.stuff.MyCommand;
 import mrriegel.blockedlayers.stuff.Statics;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 @Mod(modid = ModInfo.MOD_ID, name = ModInfo.MOD_NAME, version = ModInfo.MOD_VERSION)
 public class BlockedLayers 
@@ -46,7 +41,7 @@ public class BlockedLayers
 	public static CommonProxy proxy;
 	
 	@Mod.EventHandler
-	public void preInit(FMLPreInitializationEvent event) throws IOException 
+	public void preInit(FMLPreInitializationEvent event) throws IOException
 	{
 		File configDir = new File(event.getModConfigurationDirectory(), "BlockedLayers");
 		ConfigurationHandler.load(new File(configDir, "config.cfg"));
@@ -80,7 +75,7 @@ public class BlockedLayers
 	}
 
 	@Mod.EventHandler
-	public void init(FMLInitializationEvent event) 
+	public void init(FMLInitializationEvent event)
 	{
 		MinecraftForge.EVENT_BUS.register(new LayerHandler());
 		MinecraftForge.EVENT_BUS.register(new QuestHandler());
@@ -93,15 +88,15 @@ public class BlockedLayers
 	}
 
 	@Mod.EventHandler
-	public void serverLoad(FMLServerStartingEvent event) 
+	public void serverLoad(FMLServerStartingEvent event)
 	{
 		event.registerServerCommand(new MyCommand());
 	}
 
 	@Mod.EventHandler
-	public void postInit(FMLPostInitializationEvent event) 
+	public void postInit(FMLPostInitializationEvent event)
 	{
-		Statics.validateQuests(BlockedLayersApi.questList);
-		Statics.validateRewards(BlockedLayersApi.rewardList);
+//		Statics.validateQuests(BlockedLayersApi.questList);
+//		Statics.validateRewards(BlockedLayersApi.rewardList);
 	}
 }

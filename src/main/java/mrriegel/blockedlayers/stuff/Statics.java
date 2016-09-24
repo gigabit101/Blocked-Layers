@@ -1,86 +1,69 @@
 package mrriegel.blockedlayers.stuff;
 
-import static mrriegel.blockedlayers.BlockedLayers.instance;
+import com.google.gson.GsonBuilder;
+import mrriegel.blockedlayers.api.core.Quest;
+import mrriegel.blockedlayers.api.core.Reward;
+import mrriegel.blockedlayers.handler.ConfigurationHandler;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map.Entry;
 
-import mrriegel.blockedlayers.api.BlockedLayersApi;
-import mrriegel.blockedlayers.api.core.Quest;
-import mrriegel.blockedlayers.api.core.Reward;
-import mrriegel.blockedlayers.entity.PlayerInformation;
-import mrriegel.blockedlayers.handler.ConfigurationHandler;
-import mrriegel.blockedlayers.handler.QuestHandler;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.oredict.OreDictionary;
-
-import org.apache.commons.lang3.StringUtils;
-
-import com.google.gson.GsonBuilder;
-
-import cpw.mods.fml.common.registry.GameRegistry;
-
+//TODO
 public class Statics {
 	public static void syncTeams(String team) {
 		if (!ConfigurationHandler.teams || team.equals(""))
 			return;
-		ArrayList<EntityPlayerMP> players = new ArrayList<EntityPlayerMP>();
-		for (Object o : MinecraftServer.getServer().getConfigurationManager().playerEntityList) {
-			EntityPlayerMP p = (EntityPlayerMP) o;
-			if (team.equals(PlayerInformation.get(p).getTeam()))
-				players.add(p);
-		}
-
-		HashMap<String, Integer> fake2 = new PlayerInformation().getQuestNums();
-		for (EntityPlayerMP pp : players) {
-			for (Entry<String, Integer> entry : PlayerInformation.get(pp)
-					.getQuestNums().entrySet()) {
-				if (entry.getValue() > fake2.get(entry.getKey()))
-					fake2.put(entry.getKey(), entry.getValue());
-			}
-		}
-
-		for (EntityPlayerMP pp : players) {
-			PlayerInformation.get(pp).setQuestNums(fake2);
-			for (Quest q : BlockedLayersApi.questList) {
-				if (!PlayerInformation.get(pp).getQuestBools().get(q.getName())
-						&& PlayerInformation.get(pp).getQuestNums()
-								.get(q.getName() + "Num") >= q.getNumber())
-					new QuestHandler().finish(pp, q);
-			}
-			new QuestHandler().release(new PlayerInteractEvent(pp, null, 0, 0,
-					0, 0, pp.worldObj));
-		}
+//		ArrayList<EntityPlayerMP> players = new ArrayList<EntityPlayerMP>();
+//		for (Object o : MinecraftServer.getServer().getConfigurationManager().playerEntityList) {
+//			EntityPlayerMP p = (EntityPlayerMP) o;
+//			if (team.equals(PlayerInformation.get(p).getTeam()))
+//				players.add(p);
+//		}
+//
+//		HashMap<String, Integer> fake2 = new PlayerInformation().getQuestNums();
+//		for (EntityPlayerMP pp : players) {
+//			for (Entry<String, Integer> entry : PlayerInformation.get(pp).getQuestNums().entrySet()) {
+//				if (entry.getValue() > fake2.get(entry.getKey()))
+//					fake2.put(entry.getKey(), entry.getValue());
+//			}
+//		}
+//
+//		for (EntityPlayerMP pp : players) {
+//			PlayerInformation.get(pp).setQuestNums(fake2);
+//			for (Quest q : BlockedLayersApi.questList) {
+//				if (!PlayerInformation.get(pp).getQuestBools().get(q.getName())
+//						&& PlayerInformation.get(pp).getQuestNums()
+//								.get(q.getName() + "Num") >= q.getNumber())
+//					new QuestHandler().finish(pp, q);
+//			}
+//			new QuestHandler().release(new PlayerInteractEvent(pp, null, 0, 0,
+//					0, 0, pp.worldObj));
+//		}
 	}
 
-	public static ItemStack string2Stack(String s) {
-		ItemStack stack = null;
-		if (StringUtils.countMatches(s, ":") == 3) {
-			stack = GameRegistry.findItemStack(s.split(":")[0],
-					s.split(":")[1], Integer.valueOf(s.split(":")[3]));
-			if (stack != null) {
-				stack.setItemDamage(Integer.valueOf(s.split(":")[2]));
-			}
-		} else if (StringUtils.countMatches(s, ":") == 1) {
-			if (OreDictionary.doesOreNameExist(s.split(":")[0])) {
-				stack = OreDictionary.getOres(s.split(":")[0]).get(0);
-				stack.stackSize = Integer.valueOf(s.split(":")[1]);
-			}
-		} else
-			throw new RuntimeException("Wrong reward file");
-		if (stack == null)
-			return null;
-
-		return stack.copy();
-	}
+//	public static ItemStack string2Stack(String s) {
+//		ItemStack stack = null;
+////		if (StringUtils.countMatches(s, ":") == 3) {
+////			stack = GameRegistry.findItemStack(s.split(":")[0],
+////					s.split(":")[1], Integer.valueOf(s.split(":")[3]));
+//			if (stack != null) {
+//				stack.setItemDamage(Integer.valueOf(s.split(":")[2]));
+//			}
+//		} else if (StringUtils.countMatches(s, ":") == 1) {
+//			if (OreDictionary.doesOreNameExist(s.split(":")[0])) {
+//				stack = OreDictionary.getOres(s.split(":")[0]).get(0);
+//				stack.stackSize = Integer.valueOf(s.split(":")[1]);
+//			}
+//		} else
+//			throw new RuntimeException("Wrong reward file");
+//		if (stack == null)
+//			return null;
+//
+//		return stack.copy();
+//	}
 
 	public static void validateQuests(ArrayList<Quest> lis) {
 		ArrayList<String> names = new ArrayList<String>();
@@ -92,14 +75,14 @@ public class Statics {
 				throw new RuntimeException(q.getName()
 						+ " is longer than 16 characters");
 			boolean item = false, block = false, entity = false;
-			if (GameRegistry.findItem(q.getModID(), q.getObject()) != null
-					|| q.getObject() == null || q.getModID() == null)
-				item = true;
+//			if (GameRegistry.get(q.getModID(), q.getObject()) != null
+//					|| q.getObject() == null || q.getModID() == null)
+//				item = true;
 			if (GameRegistry.findBlock(q.getModID(), q.getObject()) != null
 					|| q.getObject() == null || q.getModID() == null)
 				block = true;
-			if (EntityList.stringToClassMapping.containsKey(q.getObject())
-					|| q.getObject() == null || q.getModID() == null)
+//			if (EntityList.stringToClassMapping.containsKey(q.getObject())
+//					|| q.getObject() == null || q.getModID() == null)
 				entity = true;
 			if (!item && !block && !entity && !q.getActivity().equals("find"))
 				throw new RuntimeException(q.getObject() + " doesn't exist");
@@ -113,8 +96,8 @@ public class Statics {
 			if (!ConfigurationHandler.reward)
 				break;
 			for (String s : r.getRewards()) {
-				if (Statics.string2Stack(s) == null)
-					throw new RuntimeException(s + " is not available.");
+//				if (Statics.string2Stack(s) == null)
+//					throw new RuntimeException(s + " is not available.");
 			}
 		}
 	}

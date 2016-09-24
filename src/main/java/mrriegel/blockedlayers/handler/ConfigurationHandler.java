@@ -1,8 +1,8 @@
 package mrriegel.blockedlayers.handler;
 
-import java.io.File;
-
 import net.minecraftforge.common.config.Configuration;
+
+import java.io.File;
 
 public class ConfigurationHandler 
 {

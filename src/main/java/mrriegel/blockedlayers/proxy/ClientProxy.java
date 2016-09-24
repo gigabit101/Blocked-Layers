@@ -1,7 +1,7 @@
 package mrriegel.blockedlayers.proxy;
 
-import cpw.mods.fml.client.registry.ClientRegistry;
 import mrriegel.blockedlayers.client.KeyHandler;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 public class ClientProxy extends CommonProxy 
 {

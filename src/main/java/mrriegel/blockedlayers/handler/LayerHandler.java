@@ -1,24 +1,24 @@
 package mrriegel.blockedlayers.handler;
 
-import java.util.Map.Entry;
-
-import mrriegel.blockedlayers.entity.PlayerInformation;
+import mrriegel.blockedlayers.old.entity.PlayerInformation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.world.BlockEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.util.Map.Entry;
 
 public class LayerHandler 
 {
 	@SubscribeEvent
 	public void disallow(BlockEvent.BreakEvent event) 
 	{
-		boolean currentBlacklisted = isIn(ConfigurationHandler.dimensionBlack, event.world.provider.dimensionId);
-		boolean currentWhitelisted = isIn(ConfigurationHandler.dimensionWhite, event.world.provider.dimensionId);
+		boolean currentBlacklisted = isIn(ConfigurationHandler.dimensionBlack, event.getWorld().provider.getDimension());
+		boolean currentWhitelisted = isIn(ConfigurationHandler.dimensionWhite, event.getWorld().provider.getDimension());
 		String bool = ConfigurationHandler.dimensionBlack.length == 0 ? ConfigurationHandler.dimensionWhite.length == 0 ? "nothing"
 				: "white"
 				: "black";
-		if (event.world.isRemote || event.getPlayer() == null
+		if (event.getWorld().isRemote || event.getPlayer() == null
 				|| event.getPlayer() instanceof FakePlayer
 				|| event.getPlayer().capabilities.isCreativeMode
 				|| (bool.equals("black") && currentBlacklisted)
@@ -33,7 +33,7 @@ public class LayerHandler
 			{
 				continue;
 			}
-			if (event.y < entry.getKey()) 
+			if (event.getPos().getY() < entry.getKey())
 			{
 				event.setCanceled(true);
 				return;

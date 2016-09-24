@@ -1,26 +1,23 @@
 package mrriegel.blockedlayers.handler;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import mrriegel.blockedlayers.entity.PlayerInformation;
-import mrriegel.blockedlayers.packet.PacketHandler;
-import mrriegel.blockedlayers.packet.SyncClientPacket;
-import mrriegel.blockedlayers.stuff.Statics;
+import mrriegel.blockedlayers.old.entity.PlayerInformation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class SyncHandler 
 {
 	@SubscribeEvent
 	public void onEntityConstructing(EntityConstructing event) 
 	{
-		if (event.entity instanceof EntityPlayer && !(event.entity instanceof FakePlayer)) 
+		if (event.getEntity() instanceof EntityPlayer && !(event.getEntity() instanceof FakePlayer))
 		{
-			EntityPlayer player = (EntityPlayer) event.entity;
-			if (PlayerInformation.get((EntityPlayer) event.entity) == null) 
+			EntityPlayer player = (EntityPlayer) event.getEntity();
+			if (PlayerInformation.get((EntityPlayer) event.getEntity()) == null)
 			{
 				PlayerInformation.register(player);
 			}
@@ -30,21 +27,21 @@ public class SyncHandler
 	@SubscribeEvent
 	public void join(EntityJoinWorldEvent e) 
 	{
-		if (e.world.isRemote)
+		if (e.getWorld().isRemote)
 			return;
 		
-		if (e.entity instanceof EntityPlayerMP) 
+		if (e.getEntity() instanceof EntityPlayerMP)
 		{
-			PacketHandler.INSTANCE.sendTo(new SyncClientPacket((EntityPlayerMP) e.entity), (EntityPlayerMP) e.entity);
-			Statics.syncTeams(PlayerInformation.get((EntityPlayer) e.entity).getTeam());
+//			PacketHandler.INSTANCE.sendTo(new SyncClientPacket((EntityPlayerMP) e.getEntity()), (EntityPlayerMP) e.getEntity());
+			//Statics.syncTeams(PlayerInformation.get((EntityPlayer) e.getEntity()).getTeam());
 		}
 	}
 
 	@SubscribeEvent
 	public void onCloning(PlayerEvent.Clone event) 
 	{
-		PlayerInformation newInfo = PlayerInformation.get(event.entityPlayer);
-		PlayerInformation oldInfo = PlayerInformation.get(event.original);
+		PlayerInformation newInfo = PlayerInformation.get(event.getEntityPlayer());
+		PlayerInformation oldInfo = PlayerInformation.get(event.getOriginal());
 		newInfo.setLayerBools(oldInfo.getLayerBools());
 		newInfo.setQuestBools(oldInfo.getQuestBools());
 		newInfo.setQuestNums(oldInfo.getQuestNums());

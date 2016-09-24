@@ -1,38 +1,31 @@
 package mrriegel.blockedlayers.client;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import mrriegel.blockedlayers.BlockedLayers;
 import mrriegel.blockedlayers.api.BlockedLayersApi;
 import mrriegel.blockedlayers.api.core.Quest;
-import mrriegel.blockedlayers.entity.PlayerInformation;
+import mrriegel.blockedlayers.old.entity.PlayerInformation;
 import mrriegel.blockedlayers.handler.ConfigurationHandler;
 import mrriegel.blockedlayers.lib.ModInfo;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-public class QuestGui extends GuiScreen {
-	private static final ResourceLocation GuiTextures = new ResourceLocation(
-			ModInfo.MOD_ID + ":textures/gui/questGUI.png");
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+//TODO
+public class QuestGui extends GuiScreen
+{
+	private static final ResourceLocation GuiTextures = new ResourceLocation( ModInfo.MOD_ID + ":textures/gui/questGUI.png");
 	int pages, page;
 	int numofentrys = 13;
 	int imageWidth = 180;
@@ -42,8 +35,8 @@ public class QuestGui extends GuiScreen {
 	int guiTop = (this.height - this.imageHeight) / 2;
 	int guiBot = guiTop + this.imageHeight;
 	ArrayList<Item> lis = new ArrayList<Item>(Arrays.asList(new Item[] {
-			Items.diamond, Items.emerald, Items.coal, Items.redstone,
-			Items.iron_ingot, Items.gold_ingot, Items.quartz }));
+			Items.DIAMOND, Items.EMERALD, Items.COAL, Items.REDSTONE,
+			Items.IRON_INGOT, Items.GOLD_INGOT, Items.QUARTZ }));
 	ItemStack deco = null;
 	GuiButton change;
 
@@ -83,8 +76,8 @@ public class QuestGui extends GuiScreen {
 		PlayerInformation pro = PlayerInformation.get(mc.thePlayer);
 		sort(pro);
 		if (ConfigurationHandler.teams) {
-			String title = pro.getTeam().equals("") ? StatCollector
-					.translateToLocal("bl.gui.noteam") : "Team: "
+			String title = pro.getTeam().equals("") ? I18n
+					.format("bl.gui.noteam") : "Team: "
 					+ pro.getTeam();
 			fontRendererObj.drawString(title,
 					this.width / 2 - fontRendererObj.getStringWidth(title) / 2,
@@ -103,7 +96,6 @@ public class QuestGui extends GuiScreen {
 
 	@Override
 	protected void actionPerformed(GuiButton p_146284_1_) {
-		super.actionPerformed(p_146284_1_);
 		if (p_146284_1_.id == 0) {
 			mode = mode.next();
 		}
@@ -160,28 +152,28 @@ public class QuestGui extends GuiScreen {
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glDepthMask(false);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			Tessellator tessellator = Tessellator.instance;
-			tessellator.startDrawing(GL11.GL_QUADS);
-			tessellator.setColorRGBA(117, 50, 30, 255);
-			tessellator.addVertex(guiLeft + this.imageWidth - 28,
-					guiTop + 25 + 8, 0);// lo
-			tessellator.addVertex(guiLeft + this.imageWidth - 28,
-					guiTop + 178 + 8, 0);// lu
-			tessellator.addVertex(guiLeft + this.imageWidth - 26,
-					guiTop + 178 + 8, 0);// ru
-			tessellator.addVertex(guiLeft + this.imageWidth - 26,
-					guiTop + 25 + 8, 0);// ro
-			tessellator.draw();
-			GL11.glDepthMask(true);
-			GL11.glDisable(GL11.GL_BLEND);
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
-			RenderItem r = new RenderItem();
-			int pos = 178 - 25;
-			double s = (double) pos / (double) (pages - numofentrys) * page
-					+ 178.D;
-			r.renderItemAndEffectIntoGUI(fontRendererObj,
-					mc.getTextureManager(), deco, guiLeft + this.imageWidth
-							- 35, (int) (guiTop + s - pos));
+			Tessellator tessellator = Tessellator.getInstance();
+//			tessellator.startDrawing(GL11.GL_QUADS);
+//			tessellator.setColorRGBA(117, 50, 30, 255);
+//			tessellator.addVertex(guiLeft + this.imageWidth - 28,
+//					guiTop + 25 + 8, 0);// lo
+//			tessellator.addVertex(guiLeft + this.imageWidth - 28,
+//					guiTop + 178 + 8, 0);// lu
+//			tessellator.addVertex(guiLeft + this.imageWidth - 26,
+//					guiTop + 178 + 8, 0);// ru
+//			tessellator.addVertex(guiLeft + this.imageWidth - 26,
+//					guiTop + 25 + 8, 0);// ro
+//			tessellator.draw();
+//			GL11.glDepthMask(true);
+//			GL11.glDisable(GL11.GL_BLEND);
+//			GL11.glEnable(GL11.GL_TEXTURE_2D);
+//			RenderItem r = new RenderItem();
+//			int pos = 178 - 25;
+//			double s = (double) pos / (double) (pages - numofentrys) * page
+//					+ 178.D;
+//			r.renderItemAndEffectIntoGUI(fontRendererObj,
+//					mc.getTextureManager(), deco, guiLeft + this.imageWidth
+//							- 35, (int) (guiTop + s - pos));
 		}
 		drawToolTip();
 
@@ -209,7 +201,7 @@ public class QuestGui extends GuiScreen {
 			return;
 		List list = new ArrayList();
 		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
-			list.add(StatCollector.translateToLocal("bl.gui.shift"));
+			list.add(I18n.format("bl.gui.shift"));
 		else {
 			String s = qu.getText();
 			List<String> matchList = new ArrayList<String>();
@@ -230,7 +222,7 @@ public class QuestGui extends GuiScreen {
 
 	@Override
 	public void handleMouseInput() {
-		super.handleMouseInput();
+//		super.handleMouseInput();
 		int i = Mouse.getX() * this.width / this.mc.displayWidth;
 		int j = this.height - Mouse.getY() * this.height
 				/ this.mc.displayHeight - 1;

@@ -1,32 +1,29 @@
 package mrriegel.blockedlayers.packet;
 
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 import io.netty.buffer.ByteBuf;
+import mrriegel.blockedlayers.old.entity.PlayerInformation;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import java.util.HashMap;
 
-import mrriegel.blockedlayers.entity.PlayerInformation;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayerMP;
-
-import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
-
-import cpw.mods.fml.common.network.ByteBufUtils;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-
-public class SyncClientPacket implements IMessage,
-		IMessageHandler<SyncClientPacket, IMessage> {
+public class SyncClientPacket implements IMessage, IMessageHandler<SyncClientPacket, IMessage>
+{
 	HashMap<Integer, Boolean> layerBools;
 	HashMap<String, Boolean> questBools;
 	HashMap<String, Integer> questNums;
 	String team;
 
-	public SyncClientPacket() {
-	}
+	public SyncClientPacket() {}
 
-	public SyncClientPacket(EntityPlayerMP player) {
+	public SyncClientPacket(EntityPlayerMP player)
+	{
 		PlayerInformation pro = PlayerInformation.get(player);
 		layerBools = pro.getLayerBools();
 		questBools = pro.getQuestBools();
@@ -46,21 +43,20 @@ public class SyncClientPacket implements IMessage,
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
+	public void fromBytes(ByteBuf buf)
+    {
 		this.layerBools = new Gson().fromJson(ByteBufUtils.readUTF8String(buf),
-				new TypeToken<HashMap<Integer, Boolean>>() {
-				}.getType());
+				new TypeToken<HashMap<Integer, Boolean>>() {}.getType());
 		this.questBools = new Gson().fromJson(ByteBufUtils.readUTF8String(buf),
-				new TypeToken<HashMap<String, Boolean>>() {
-				}.getType());
+				new TypeToken<HashMap<String, Boolean>>() {}.getType());
 		this.questNums = new Gson().fromJson(ByteBufUtils.readUTF8String(buf),
-				new TypeToken<HashMap<String, Integer>>() {
-				}.getType());
+				new TypeToken<HashMap<String, Integer>>() {}.getType());
 		this.team = ByteBufUtils.readUTF8String(buf);
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
+	public void toBytes(ByteBuf buf)
+    {
 		String lb = new Gson().toJson(layerBools);
 		String qb = new Gson().toJson(questBools);
 		String qn = new Gson().toJson(questNums);

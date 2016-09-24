@@ -1,38 +1,32 @@
 package mrriegel.blockedlayers.handler;
 
-import java.util.ArrayList;
-import java.util.Map.Entry;
-
-import mrriegel.blockedlayers.BlockedLayers;
 import mrriegel.blockedlayers.api.BlockedLayersApi;
 import mrriegel.blockedlayers.api.core.Quest;
 import mrriegel.blockedlayers.api.core.Reward;
-import mrriegel.blockedlayers.entity.PlayerInformation;
+import mrriegel.blockedlayers.old.entity.PlayerInformation;
 import mrriegel.blockedlayers.stuff.Statics;
-import net.minecraft.block.Block;
-import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerPickupXpEvent;
-import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
+
+import java.util.ArrayList;
+import java.util.Map.Entry;
 
 public class QuestHandler {
 
@@ -51,44 +45,43 @@ public class QuestHandler {
 		String name = q.getName();
 		pro.getQuestBools().put(name, true);
 		pro.getQuestNums().put(name + "Num", q.getNumber());
-		player.addChatMessage(new ChatComponentText(StatCollector
-				.translateToLocalFormatted("bl.quest.done falnfiansfi", name)));
+		player.addChatMessage(new TextComponentString(I18n.format("bl.quest.done falnfiansfi", name)));
 	}
 
-	@SubscribeEvent
-	public void eatItem(PlayerUseItemEvent.Finish event) {
-		if (event.entityPlayer.worldObj.isRemote)
-			return;
-		EntityPlayer player = event.entityPlayer;
-		PlayerInformation pro = PlayerInformation.get(player);
-		for (Quest q : BlockedLayersApi.questList) {
-			String name = q.getName();
-			if (!q.getActivity().equals("eat") || !questValid(pro, q)
-					|| pro.getQuestBools().get(name)
-					|| player.capabilities.isCreativeMode) {
-				continue;
-			}
-			ItemStack stack;
-			Item target = GameRegistry.findItem(q.getModID(), q.getObject());
-			if (q.getMeta() == -1)
-				stack = new ItemStack(target, 1, event.entityPlayer
-						.getCurrentEquippedItem().getItemDamage());
-			else
-				stack = new ItemStack(target, 1, q.getMeta());
-
-			int number = q.getNumber();
-			int dim = q.getDimentionID();
-
-			if (player.getCurrentEquippedItem().isItemEqual(stack)) {
-				pro.getQuestNums().put(name + "Num",
-						pro.getQuestNums().get(name + "Num") + 1);
-				if (pro.getQuestNums().get(name + "Num") >= number && event.entityPlayer.worldObj.provider.dimensionId == dim) {
-					finish(player, q);
-					Statics.syncTeams(pro.getTeam());
-				}
-			}
-		}
-	}
+//	@SubscribeEvent
+//	public void eatItem(PlayerUseItemEvent.Finish event) {
+//		if (event.entityPlayer.worldObj.isRemote)
+//			return;
+//		EntityPlayer player = event.entityPlayer;
+//		PlayerInformation pro = PlayerInformation.get(player);
+//		for (Quest q : BlockedLayersApi.questList) {
+//			String name = q.getName();
+//			if (!q.getActivity().equals("eat") || !questValid(pro, q)
+//					|| pro.getQuestBools().get(name)
+//					|| player.capabilities.isCreativeMode) {
+//				continue;
+//			}
+//			ItemStack stack;
+//			Item target = GameRegistry.findItem(q.getModID(), q.getObject());
+//			if (q.getMeta() == -1)
+//				stack = new ItemStack(target, 1, event.entityPlayer
+//						.getCurrentEquippedItem().getItemDamage());
+//			else
+//				stack = new ItemStack(target, 1, q.getMeta());
+//
+//			int number = q.getNumber();
+//			int dim = q.getDimentionID();
+//
+//			if (player.getCurrentEquippedItem().isItemEqual(stack)) {
+//				pro.getQuestNums().put(name + "Num",
+//						pro.getQuestNums().get(name + "Num") + 1);
+//				if (pro.getQuestNums().get(name + "Num") >= number && event.entityPlayer.worldObj.provider.dimensionId == dim) {
+//					finish(player, q);
+//					Statics.syncTeams(pro.getTeam());
+//				}
+//			}
+//		}
+//	}
 
 	@SubscribeEvent
 	public void breakBlock(BreakEvent event) {
@@ -101,40 +94,39 @@ public class QuestHandler {
 			if (!q.getActivity().equals("break")
 					|| !questValid(pro, q)
 					|| pro.getQuestBools().get(name)
-					|| player.capabilities.isCreativeMode
-					|| (ConfigurationHandler.withoutSilk && EnchantmentHelper
-							.getSilkTouchModifier(player))) {
-				continue;
-			}
-
-			Block target = GameRegistry.findBlock(q.getModID(), q.getObject());
-			int meta;
-			if (q.getMeta() == -1) {
-				meta = event.blockMetadata;
-			} else {
-				meta = q.getMeta();
-			}
-			int number = q.getNumber();
-			int dim = q.getDimentionID();
-
-			if (event.block.equals(target) && event.blockMetadata == meta) 
-			{
-				pro.getQuestNums().put(name + "Num", pro.getQuestNums().get(name + "Num") + 1);
-				if (pro.getQuestNums().get(name + "Num") >= number && event.world.provider.dimensionId == dim) 
-				{
-					finish(player, q);
-					Statics.syncTeams(pro.getTeam());
-				}
-			}
+					|| player.capabilities.isCreativeMode){}
+//					|| (ConfigurationHandler.withoutSilk && EnchantmentHelper.getSilkTouchModifier(player))) {
+//				continue;
+//			}
+//
+//			Block target = GameRegistry.findBlock(q.getModID(), q.getObject());
+//			int meta;
+//			if (q.getMeta() == -1) {
+//				meta = event.blockMetadata;
+//			} else {
+//				meta = q.getMeta();
+//			}
+//			int number = q.getNumber();
+//			int dim = q.getDimentionID();
+//
+//			if (event.block.equals(target) && event.blockMetadata == meta)
+//			{
+//				pro.getQuestNums().put(name + "Num", pro.getQuestNums().get(name + "Num") + 1);
+//				if (pro.getQuestNums().get(name + "Num") >= number && event.world.provider.dimensionId == dim)
+//				{
+//					finish(player, q);
+//					Statics.syncTeams(pro.getTeam());
+//				}
+//			}
 		}
 	}
 
 	@SubscribeEvent
 	public void kill(LivingDeathEvent event) {
-		if (event.entityLiving.worldObj.isRemote
-				|| !(event.source.getEntity() instanceof EntityPlayer))
+		if (event.getEntityLiving().worldObj.isRemote
+				|| !(event.getSource().getEntity() instanceof EntityPlayer))
 			return;
-		EntityPlayer player = (EntityPlayer) event.source.getEntity();
+		EntityPlayer player = (EntityPlayer) event.getSource().getEntity();
 		PlayerInformation pro = PlayerInformation.get(player);
 		for (Quest q : BlockedLayersApi.questList) {
 			String name = q.getName();
@@ -144,32 +136,30 @@ public class QuestHandler {
 				continue;
 			}
 
-			Class target = (Class) EntityList.stringToClassMapping.get(q
-					.getObject());
+//			Class target = (Class) EntityList.getIDFromString(q.getObject());
 
 			int number = q.getNumber();
 			int meta = q.getMeta();
 			int dim = q.getDimentionID();
-			Entity e = event.entity;
+			Entity e = event.getEntity();
 
-			if (target.isInstance(e)
-					&& (!(e instanceof EntitySkeleton) || ((EntitySkeleton) e)
-							.getSkeletonType() == meta)) {
-				pro.getQuestNums().put(name + "Num",
-						pro.getQuestNums().get(name + "Num") + 1);
-				if (pro.getQuestNums().get(name + "Num") >= number && event.entityLiving.worldObj.provider.dimensionId == dim) {
-					finish(player, q);
-					Statics.syncTeams(pro.getTeam());
-				}
-			}
+//			if (target.isInstance(e) && (!(e instanceof EntitySkeleton)))
+//            {
+//				pro.getQuestNums().put(name + "Num",
+//						pro.getQuestNums().get(name + "Num") + 1);
+//				if (pro.getQuestNums().get(name + "Num") >= number && event.getEntityLiving().worldObj.provider.getDimension() == dim) {
+//					finish(player, q);
+//					Statics.syncTeams(pro.getTeam());
+//				}
+//			}
 		}
 	}
 
 	@SubscribeEvent
 	public void harvest(HarvestDropsEvent event) {
-		if (event.world.isRemote)
+		if (event.getWorld().isRemote)
 			return;
-		EntityPlayer player = event.harvester;
+		EntityPlayer player = event.getHarvester();
 		if (player == null)
 			return;
 		PlayerInformation pro = PlayerInformation.get(player);
@@ -183,7 +173,7 @@ public class QuestHandler {
 			ItemStack target = null;
 			Item targetItem = GameRegistry
 					.findItem(q.getModID(), q.getObject());
-			for (ItemStack stack : event.drops) {
+			for (ItemStack stack : event.getDrops()) {
 				if (q.getMeta() == -1)
 					target = new ItemStack(targetItem, 1, stack.getItemDamage());
 				else
@@ -196,7 +186,7 @@ public class QuestHandler {
 							name + "Num",
 							pro.getQuestNums().get(name + "Num")
 									+ stack.copy().stackSize);
-					if (pro.getQuestNums().get(name + "Num") >= number && event.world.provider.dimensionId == dim) {
+					if (pro.getQuestNums().get(name + "Num") >= number && event.getWorld().provider.getDimension() == dim) {
 						finish(player, q);
 						Statics.syncTeams(pro.getTeam());
 					}
@@ -207,10 +197,10 @@ public class QuestHandler {
 
 	@SubscribeEvent
 	public void loot(LivingDropsEvent event) {
-		if (event.entityLiving.worldObj.isRemote
-				|| !(event.source.getEntity() instanceof EntityPlayer))
+		if (event.getEntityLiving().worldObj.isRemote
+				|| !(event.getSource().getEntity() instanceof EntityPlayer))
 			return;
-		EntityPlayer player = (EntityPlayer) event.source.getEntity();
+		EntityPlayer player = (EntityPlayer) event.getSource().getEntity();
 		PlayerInformation pro = PlayerInformation.get(player);
 		for (Quest q : BlockedLayersApi.questList) {
 			String name = q.getName();
@@ -223,7 +213,7 @@ public class QuestHandler {
 			ItemStack target = null;
 			Item targetItem = GameRegistry
 					.findItem(q.getModID(), q.getObject());
-			for (EntityItem item : event.drops) {
+			for (EntityItem item : event.getDrops()) {
 				ItemStack stack = item.getEntityItem().copy();
 				if (q.getMeta() == -1)
 					target = new ItemStack(targetItem, 1, stack.getItemDamage());
@@ -237,7 +227,7 @@ public class QuestHandler {
 							name + "Num",
 							pro.getQuestNums().get(name + "Num")
 									+ stack.stackSize);
-					if (pro.getQuestNums().get(name + "Num") >= number && event.entityLiving.worldObj.provider.dimensionId == dim) {
+					if (pro.getQuestNums().get(name + "Num") >= number && event.getEntityLiving().worldObj.provider.getDimension() == dim) {
 						finish(player, q);
 						Statics.syncTeams(pro.getTeam());
 					}
@@ -248,9 +238,9 @@ public class QuestHandler {
 
 	@SubscribeEvent
 	public void own(PlayerInteractEvent event) {
-		if (event.world.isRemote)
+		if (event.getWorld().isRemote)
 			return;
-		EntityPlayer player = event.entityPlayer;
+		EntityPlayer player = event.getEntityPlayer();
 		PlayerInformation pro = PlayerInformation.get(player);
 		for (Quest q : BlockedLayersApi.questList) {
 			String name = q.getName();
@@ -345,9 +335,9 @@ public class QuestHandler {
 
 	@SubscribeEvent
 	public void xp(PlayerPickupXpEvent event) {
-		if (event.entityPlayer.worldObj.isRemote)
+		if (event.getEntityPlayer().worldObj.isRemote)
 			return;
-		EntityPlayer player = event.entityPlayer;
+		EntityPlayer player = event.getEntityPlayer();
 		PlayerInformation pro = PlayerInformation.get(player);
 		for (Quest q : BlockedLayersApi.questList) {
 			String name = q.getName();
@@ -360,7 +350,7 @@ public class QuestHandler {
 			int number = q.getNumber();
 
 			pro.getQuestNums().put(name + "Num",
-					pro.getQuestNums().get(name + "Num") + event.orb.xpValue);
+					pro.getQuestNums().get(name + "Num") + event.getOrb().xpValue);
 			if (pro.getQuestNums().get(name + "Num") >= number) {
 				finish(player, q);
 				Statics.syncTeams(pro.getTeam());
@@ -370,12 +360,12 @@ public class QuestHandler {
 
 	@SubscribeEvent
 	public void find(PlayerInteractEvent event) {
-		if (event.entityPlayer.worldObj.isRemote)
+		if (event.getEntityPlayer().worldObj.isRemote)
 			return;
-		EntityPlayer player = event.entityPlayer;
+		EntityPlayer player = event.getEntityPlayer();
 		PlayerInformation pro = PlayerInformation.get(player);
-		String currentBiom = event.world.getWorldChunkManager().getBiomeGenAt(
-				event.x, event.z).biomeName;
+//		String currentBiom = event.getWorld().getWorldChunkManager().getBiomeGenAt(
+//				event.x, event.z).biomeName;
 		for (Quest q : BlockedLayersApi.questList) {
 			String name = q.getName();
 			if (!q.getActivity().equals("find") || !questValid(pro, q)
@@ -384,10 +374,10 @@ public class QuestHandler {
 				continue;
 			}
 			String biom = q.getObject();
-			if (biom.equalsIgnoreCase(currentBiom)) {
-				finish(player, q);
-				Statics.syncTeams(pro.getTeam());
-			}
+//			if (biom.equalsIgnoreCase(currentBiom)) {
+//				finish(player, q);
+//				Statics.syncTeams(pro.getTeam());
+//			}
 		}
 	}
 
@@ -455,9 +445,9 @@ public class QuestHandler {
 
 	@SubscribeEvent
 	public void release(PlayerInteractEvent event) {
-		if (event.world.isRemote)
+		if (event.getWorld().isRemote)
 			return;
-		EntityPlayer player = event.entityPlayer;
+		EntityPlayer player = event.getEntityPlayer();
 		PlayerInformation pro = PlayerInformation.get(player);
 		for (Entry<Integer, Boolean> entry : pro.getLayerBools().entrySet()) {
 			boolean ll = true;
@@ -471,8 +461,8 @@ public class QuestHandler {
 			}
 			if (!pro.getLayerBools().get(entry.getKey()) && ll) {
 				pro.getLayerBools().put(entry.getKey(), true);
-				player.addChatMessage(new ChatComponentText(StatCollector
-						.translateToLocalFormatted("bl.layer.done",
+				player.addChatMessage(new TextComponentString(I18n
+						.format("bl.layer.done",
 								entry.getKey())));
 				if (!ConfigurationHandler.reward)
 					continue;
@@ -480,8 +470,8 @@ public class QuestHandler {
 					if (r.getLayer() == entry.getKey()) {
 						ArrayList<ItemStack> tmp = new ArrayList<ItemStack>();
 						for (String s : r.getRewards()) {
-							if (Statics.string2Stack(s) != null)
-								tmp.add(Statics.string2Stack(s));
+//							if (Statics.string2Stack(s) != null)
+//								tmp.add(Statics.string2Stack(s));
 						}
 						for (ItemStack s : tmp) {
 							if (!player.inventory.addItemStackToInventory(s)) {
@@ -489,7 +479,7 @@ public class QuestHandler {
 										player.worldObj, player.posX + 0.5D,
 										player.posY + 0.5D, player.posZ + 0.5D,
 										s);
-								event.world.spawnEntityInWorld(entityitem);
+								event.getWorld().spawnEntityInWorld(entityitem);
 							}
 
 						}
